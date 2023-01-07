@@ -1,0 +1,224 @@
+#linear Regression
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn import metrics
+%matplotlib inline
+dataset=pd.read_csv('Salary_Data.csv')
+#print(dataset.shape)
+#dataset.head(5)
+#dataset.describe()
+#dataset.plot(x='YearsExperience',y='Salary',style='*')
+#plt.title('years vs salary')
+#plt.xlabel('YearsExperience')
+#plt.ylabel('Salary')
+x=dataset['YearsExperience'].values.reshape(-1,1)
+print(x)
+y=dataset['Salary'].values.reshape(-1,1)
+print(y)
+#spliting input dataset into training and testing
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state=0)
+#print(x,y)
+from sklearn.preprocessing import StandardScaler
+sc=StandardScaler()
+sc.fit(x_train)
+x_train=sc.transform(x_train)
+x_test=sc.transform(x_test)
+y_train=sc.transform(y_train)
+y_test=sc.transform(y_test)
+#print(x_train)
+#print(y_train)
+LR=LinearRegression()
+LR.fit(x_train,y_train)
+print("intercept",LR.intercept_)#slope value m
+print("Coeffcient",LR.coef_)#constant value c
+y_pred=LR.predict(x_test)
+plt.scatter(x_train,y_train)
+plt.plot(x_test,y_pred,color='red')
+plt.title("linearreg")
+plt.xlabel('YearsExperience')
+plt.ylabel('Salary')
+plt.show()
+accuracy=LR.score(x_test,y_test)
+print("accuracy="+str(accuracy))
+
+
+#polynomial regression
+import numpy as np 
+import matplotlib.pyplot as mtp
+import pandas as pd
+dataset=pd.read_csv('Position_Salaries.csv')
+print(dataset)
+x=dataset.iloc[:,1:2].values
+#print(x)
+y=dataset.iloc[:,2].values
+print(y)
+from sklearn.linear_model import LinearRegression
+lin=LinearRegression()
+lin.fit(x,y)
+mtp.scatter(x,y,color='blue')
+mtp.plot(x,lin.predict(x),color="red")
+mtp.title("salary estimate")
+mtp.xlabel("Position Levels")
+mtp.ylabel("salary")
+mtp.show()
+from sklearn.preprocessing import PolynomialFeatures
+poly=PolynomialFeatures(degree=2)
+x_poly=poly.fit_transform(x)
+lin_reg=LinearRegression()
+lin_reg.fit(x_poly,y)
+mtp.scatter(x,y,color='blue')
+mtp.plot(x,linreg.predict(x_poly),color="red")
+mtp.title("salary estimate")
+mtp.xlabel("Position Levels")
+mtp.ylabel("salary")
+mtp.show()
+
+#iris
+import pandas as pd
+import numpy as np 
+import matplotlib.pyplot as plt
+from sklearn import preprocessing
+iris=pd.read_csv("iris.csv")
+print(iris)
+iris=iris.drop('Id',axis=1)
+le=preprocessing.LabelEncoder()
+iris.Species=le.fit_transform(iris.Species)
+x=iris.iloc[:,:-1].values
+print(x)
+y=iris.iloc[:,4].values
+print(y)
+plt.scatter(x[:,0],x[:,3],c=y,cmap='flag')
+plt.xlabel("Sepal Length cm")
+plt.ylabel("Petal Width cm")
+plt.show()
+
+
+#multiple regression
+from sklearn.utils.fixes import sklearn
+import pandas as pd
+import numpy as np 
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn import metrics
+%matplotlib inline
+df=pd.read_csv("cars.csv")
+print(df)
+df.head(5)
+x=df[['debt','income']]
+y=df['sales']
+print(x,y)
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state=0)
+from sklearn.linear_model import LinearRegression
+MLR=LinearRegression()
+MLR.fit(x_train,y_train)
+
+print("intercept",MLR.intercept_)
+print("coefficient",MLR.coef_)
+predict=MLR.predict([[418,7017]])
+print(predict)
+
+#naive bayes
+import numpy as np 
+import matplotlib.pyplot as mtp
+import pandas as pd
+dataset=pd.read_csv('suv_data.csv')
+print(dataset)
+x=dataset.iloc[:,[2,3]].values
+print(x)
+y=dataset.iloc[:,4].values
+print(y)
+#splitting dataset into training and testing dataset
+from sklearn.model_selection import train_test_split
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state=0)
+#feature scaling
+from sklearn.preprocessing import StandardScaler
+sc=StandardScaler()
+x_train=sc.fit_transform(x_train)
+x_test=sc.transform(x_test)
+from sklearn.naive_bayes import GaussianNB
+classifier=GaussianNB()
+classifier.fit(x_train,y_train)
+GaussianNB(priors=None,var_smoothing=1e-09)
+#predecting the test set result
+y_pred=classifier.predict(x_test)
+#making confusion matrix
+from sklearn.metrics import confusion_matrix
+cm=confusion_matrix(y_test,y_pred)
+print(cm)
+from sklearn.metrics import accuracy_score
+print("Accuracy",accuracy_score(y_test,y_pred))
+
+
+#drop
+import numpy as np 
+import matplotlib.pyplot as mtp
+import pandas as pd
+dict={'First Score':[100,90,np.nan,95],
+      'Second Score':[30,45,56,np.nan],
+      'Third Score':[np.nan,40,80,98],
+      'Fourth Score':[80,90,np.nan,50]}
+#creating a dataframe from list
+df=pd.DataFrame(dict)
+print(df)
+df.isnull()
+
+
+#decision tree
+import numpy as np 
+import matplotlib.pyplot as mtp
+import pandas as pd
+#loding a play tennis data
+PlayTennis=pd.read_csv('playtennis.csv')
+PlayTennis
+from sklearn.preprocessing import LabelEncoder
+Le=LabelEncoder()
+PlayTennis['outlook']=Le.fit_transform(PlayTennis['outlook'])
+PlayTennis['temp']=Le.fit_transform(PlayTennis['temp'])
+PlayTennis['humidity']=Le.fit_transform(PlayTennis['humidity'])
+PlayTennis['windy']=Le.fit_transform(PlayTennis['windy'])
+PlayTennis['play']=Le.fit_transform(PlayTennis['play'])
+PlayTennis
+y=PlayTennis['play']
+x=PlayTennis.drop(['play'],axis=1)
+from sklearn import tree
+clf=tree.DecisionTreeClassifier(criterion='entropy')
+clf=clf.fit(x,y)
+#we can visualize
+tree.plot_tree(clf)
+
+
+#SVC(support vector machine)
+import numpy as np 
+import matplotlib.pyplot as mtp
+import pandas as pd
+dataset=pd.read_csv('suv_data.csv')
+print(dataset)
+x=dataset.iloc[:,[2,3]].values
+print(x)
+y=dataset.iloc[:,4].values
+print(y)
+#splitting dataset into training and testing dataset
+from sklearn.model_selection import train_test_split
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state=0)
+#feature scaling
+from sklearn.preprocessing import StandardScaler
+sc=StandardScaler()
+x_train=sc.fit_transform(x_train)
+x_test=sc.transform(x_test)
+from sklearn.svm import SVC
+classifier=SVC(kernel='linear',random_state=0)
+classifier.fit(x_train,y_train)
+#predecting the test set result
+y_pred=classifier.predict(x_test)
+#making confusion matrix
+from sklearn.metrics import confusion_matrix
+cm=confusion_matrix(y_test,y_pred)
+print(cm)
+from sklearn.metrics import accuracy_score
+print("Accuracy",accuracy_score(y_test,y_pred))
+
+
